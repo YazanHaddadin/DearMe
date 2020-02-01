@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registrationPageLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegistrationActivity"
+    android:background="@color/colorWhite">
+
+    <ImageView
+        android:id="@+id/ivProfileR"
+        android:layout_width="160dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="40dp"
+        app:srcCompat="@drawable/im_dear_me_logo"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/etUserNameR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivProfileR"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="0dp"
+        android:ems="13"
+        android:hint="Username"
+        android:inputType="textPersonName"
+        android:textColorHighlight="#50BAF0"/>
+
+    <EditText
+        android:id="@+id/etUserEmailR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etUserNameR"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:ems="13"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColorHighlight="#50BAF0"
+        />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipUserGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etUserEmailR"
+        android:ems="4"
+        android:layout_alignLeft="@id/etUserEmailR"
+        android:layout_alignStart="@id/etUserEmailR"
+        app:singleSelection="true"
+        android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar">
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Male"
+            android:clickable="true"
+            android:focusable="true"
+            android:checkable="true"
+            android:ems="4"
+            android:textAlignment="center"
+            app:rippleColor="@color/colorAccent"
+            app:chipBackgroundColor="@color/chip_color"
+            style="@style/ChipCustomStyle"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Female"
+            android:clickable="true"
+            android:focusable="true"
+            android:checkable="true"
+            android:ems="4"
+            android:textAlignment="center"
+            app:rippleColor="@color/colorAccent"
+            app:chipBackgroundColor="@color/chip_color"
+            style="@style/ChipCustomStyle"
+            />
+    </com.google.android.material.chip.ChipGroup>
+
+    <EditText
+        android:id="@+id/etDOB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etUserEmailR"
+        android:layout_alignRight="@id/etUserEmailR"
+        android:layout_alignEnd="@id/etUserEmailR"
+        android:layout_toRightOf="@id/chipUserGender"
+        android:layout_toEndOf="@id/chipUserGender"
+        android:hint="Date of Birth"
+        android:text= ""
+        android:inputType="none"
+        android:textAlignment="center"
+        android:focusable="false"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="15dp"
+        />
+
+    <EditText
+        android:id="@+id/etUserPasswordR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etDOB"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:ems="13"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColorHighlight="#50BAF0"
+        />
+
+    <EditText
+        android:id="@+id/etConfirmPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etUserPasswordR"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:ems="13"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:textColorHighlight="#50BAF0"
+        />
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:ems="12"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/etConfirmPassword"
+        android:background="@color/buttonColor"/>
+
+    <TextView
+        android:id="@+id/tvToLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="Already have an account? Login!"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHighlight="@color/colorAccent"
+        android:textSize="22sp" />
+
+</RelativeLayout>

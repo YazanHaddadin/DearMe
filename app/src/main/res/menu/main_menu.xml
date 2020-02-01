@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/goToUserProfile"
+        android:orderInCategory="1"
+        app:showAsAction="ifRoom"
+        android:title="User" />
+
+    <item
+        android:id="@+id/changeAct"
+        android:orderInCategory="2"
+        android:title="Change"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/logOutBtn"
+        android:title="Log Out"
+        android:orderInCategory="3"
+        app:showAsAction="never" />
+
+</menu>

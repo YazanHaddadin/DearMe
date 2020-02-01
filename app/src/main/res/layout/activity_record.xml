@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RecordActivity"
+    android:background="@color/colorPrimary">
+
+    <Button
+        android:id="@+id/recordBtn"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:background="@drawable/im_microphone"
+        android:layout_marginBottom="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/playBtn"
+        android:visibility="visible"/>
+
+    <Button
+        android:id="@+id/recordingBtn"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:background="@drawable/im_recording"
+        android:layout_marginBottom="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/playBtn"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/playBtn"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@android:drawable/ic_media_play"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/recordBtn"
+        android:layout_alignLeft="@+id/recordBtn"
+        android:layout_marginBottom="50dp"
+        android:enabled="false"
+        />
+
+    <Button
+        android:id="@+id/stopBtn"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@android:drawable/ic_media_pause"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/recordBtn"
+        android:layout_alignEnd="@+id/recordBtn"
+        android:layout_marginBottom="50dp"
+        android:enabled="false"
+        />
+
+</RelativeLayout>

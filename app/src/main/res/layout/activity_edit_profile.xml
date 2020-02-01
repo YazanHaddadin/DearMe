@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditProfileActivity">
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit your Profile Information"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="60dp"
+        android:textSize="23sp"
+        />
+
+    <EditText
+        android:id="@+id/etUserNameEP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="40dp"
+        android:layout_below="@id/tvInfo"
+        android:ems="13"
+        android:hint="Username"
+        android:inputType="textEmailAddress"
+        android:textColorHighlight="#50BAF0"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipUserGenderEP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etUserNameEP"
+        android:ems="4"
+        android:layout_alignLeft="@id/etUserNameEP"
+        android:layout_alignStart="@id/etUserNameEP"
+        app:singleSelection="true"
+        android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar">
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipMaleEP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Male"
+            android:clickable="true"
+            android:focusable="true"
+            android:checkable="true"
+            android:ems="4"
+            android:textAlignment="center"
+            app:rippleColor="@color/colorAccent"
+            app:chipBackgroundColor="@color/chip_color"
+            style="@style/ChipCustomStyle"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFemaleEP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Female"
+            android:clickable="true"
+            android:focusable="true"
+            android:checkable="true"
+            android:ems="4"
+            android:textAlignment="center"
+            app:rippleColor="@color/colorAccent"
+            app:chipBackgroundColor="@color/chip_color"
+            style="@style/ChipCustomStyle"
+            />
+    </com.google.android.material.chip.ChipGroup>
+
+    <EditText
+        android:id="@+id/etUserDOBEP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etUserNameEP"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="13dp"
+        android:ems="13"
+        android:hint="Date Of Birth"
+        android:inputType="none"
+        android:textAlignment="center"
+        android:focusable="false"
+        android:textColorHighlight="#50BAF0"
+        android:layout_alignRight="@id/etUserNameEP"
+        android:layout_alignEnd="@id/etUserNameEP"
+        android:layout_toRightOf="@id/chipUserGenderEP"
+        android:layout_toEndOf="@id/chipUserGenderEP"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="15dp"
+        />
+
+    <Button
+        android:id="@+id/editSaveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:ems="9"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/etUserDOBEP"
+        android:layout_margin="20dp"
+        android:background="@color/buttonColor"
+        android:visibility="visible"
+        />
+
+</RelativeLayout>

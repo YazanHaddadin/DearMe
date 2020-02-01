@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "748525694371",
+    "firebase_url": "https://dearme-567a3.firebaseio.com",
+    "project_id": "dearme-567a3",
+    "storage_bucket": "dearme-567a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748525694371:android:1bed3516660e254667fe16",
+        "android_client_info": {
+          "package_name": "com.me.dear"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "748525694371-1ouuq7jdo992f7v0vtcd1gp35cid09s0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.me.dear",
+            "certificate_hash": "288a3a2558fd2150dd6a76fd73d20639a7ce0615"
+          }
+        },
+        {
+          "client_id": "748525694371-vlvsnn2v964947j96037afjk2pc0r6jt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAujZg9gJvDu8bhWkERjrfvQreEJNWggPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "748525694371-vlvsnn2v964947j96037afjk2pc0r6jt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
