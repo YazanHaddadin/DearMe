@@ -47,7 +47,7 @@ public class RecordActivity extends AppCompatActivity {
         if(!checkPermissionFromDevice())
             requestPermission();
 
-        assignUI();
+        //assignUI();
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
