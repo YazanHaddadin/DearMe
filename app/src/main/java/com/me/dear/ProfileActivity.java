@@ -2,6 +2,7 @@ package com.me.dear;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -46,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     ImageView userProfile;
     Button deleteAccountBtn;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,11 @@ public class ProfileActivity extends AppCompatActivity {
         checkUserAuth();
 
         assignUIElements();
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         progressDialog = new ProgressDialog(this);
         adapter = new UserProfileAdapter(this, userArrayList);
@@ -66,10 +73,6 @@ public class ProfileActivity extends AppCompatActivity {
         DatabaseReference myRef = firebaseDatabase.getReference("users/" + firebaseAuth.getUid());
 
         mDatabaseHelper = new DatabaseHelper(this);
-
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         nullifyList(userArrayList);
         populateData();
@@ -248,6 +251,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void assignUIElements(){
         deleteAccountBtn = (Button) findViewById(R.id.deleteAccountBtn);
         userProfile = (ImageView) findViewById(R.id.ivUserProfile);
+        toolbar = (Toolbar) findViewById(R.id.userProfileToolbar);
     }
 
     private void toastMessage(String mssg){

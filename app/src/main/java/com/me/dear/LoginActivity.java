@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         assignUIComp();
 
         final Intent registerPageActivity = new Intent(getBaseContext(), RegistrationActivity.class);
-        final Intent voiceNotesPageAct = new Intent(getBaseContext(), VoiceNotesActivity.class);
+        final Intent recordAct = new Intent(getBaseContext(), RecordActivity.class);
         final Intent forgotPassAct = new Intent(getBaseContext(), ForgotPasswordActivity.class);
         final RelativeLayout loginPageLayout = (RelativeLayout) findViewById(R.id.loginPageLayout);
         loginPageLayout.setAlpha(1);
@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(user != null){
             finish();
-            startActivity(voiceNotesPageAct);
+            startActivity(recordAct);
         }
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
         if(isVerified){
             finish();
             Toast.makeText(getBaseContext(), "Login Successful", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getBaseContext(), VoiceNotesActivity.class));
+            startActivity(new Intent(getBaseContext(), RecordActivity.class));
         }else{
             Toast.makeText(this, "Verify your email to Login", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getBaseContext(), VerificationEmailActivity.class));

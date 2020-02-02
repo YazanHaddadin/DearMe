@@ -1,6 +1,7 @@
 package com.me.dear;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,6 +26,7 @@ public class VoiceNotesActivity extends AppCompatActivity {
     ArrayList<VoiceNotesInfo> arL;
     private FirebaseAuth firebaseAuth;
     FloatingActionButton addNewItem;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +35,17 @@ public class VoiceNotesActivity extends AppCompatActivity {
 
         arL = new ArrayList<>();
 
+        insUIItems();
+        setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         firebaseAuth = FirebaseAuth.getInstance();
         checkUserAuth();
 
         populateList(arL);
-        insUIItems();
 
         ArrayAdapter<VoiceNotesInfo> adapter = new VoiceNotesAdapter(this, arL);
         ListView lv = (ListView) findViewById(R.id.lvVoiceNotes);
@@ -70,25 +75,8 @@ public class VoiceNotesActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(firebaseAuth.getCurrentUser() == null){
-            finish();
-            startActivity(new Intent(getBaseContext(), LoginActivity.class));
-        }
-    }
-
-    private void insUIItems(){
-        addNewItem = (FloatingActionButton) findViewById(R.id.addNewBtn);
-    }
-
     private void populateList(ArrayList<VoiceNotesInfo> ar){
-        ar.add(new VoiceNotesInfo("Lion", "Haddadin", R.drawable.ic_launcher_foreground));
-        ar.add(new VoiceNotesInfo("Tiger", "Drew", R.mipmap.ic_launcher));
-        ar.add(new VoiceNotesInfo("Monkey", "Crowdey", R.mipmap.ic_launcher));
-        ar.add(new VoiceNotesInfo("Elephant", "Fatty", R.drawable.ic_launcher_foreground));
-        ar.add(new VoiceNotesInfo("Mountain", "Lion", R.mipmap.ic_launcher));
+        ar.add(new VoiceNotesInfo("Lorem", "Ipsum", R.drawable.ic_launcher_foreground));
     }
 
     @Override
@@ -100,6 +88,10 @@ public class VoiceNotesActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+
             case R.id.goToUserProfile:
                 startActivity(new Intent(getBaseContext(), ProfileActivity.class));
                 return true;
@@ -135,5 +127,19 @@ public class VoiceNotesActivity extends AppCompatActivity {
             finish();
             startActivity(new Intent(getBaseContext(), LoginActivity.class));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(firebaseAuth.getCurrentUser() == null){
+            finish();
+            startActivity(new Intent(getBaseContext(), LoginActivity.class));
+        }
+    }
+
+    private void insUIItems(){
+        addNewItem = (FloatingActionButton) findViewById(R.id.addNewBtn);
+        toolbar = (Toolbar) findViewById(R.id.voiceNotesToolbar);
     }
 }

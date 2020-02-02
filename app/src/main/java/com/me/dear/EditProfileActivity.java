@@ -2,6 +2,7 @@ package com.me.dear;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private EditText newUserName, newUserDOB;
     ChipGroup chipGroup;
+    Toolbar toolbar;
     private Button saveBtn;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -45,6 +47,7 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         assignUI();
+        setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -152,6 +155,7 @@ public class EditProfileActivity extends AppCompatActivity {
         newUserDOB = (EditText) findViewById(R.id.etUserDOBEP);
         saveBtn = (Button) findViewById(R.id.editSaveBtn);
         chipGroup = (ChipGroup) findViewById(R.id.chipUserGenderEP);
+        toolbar = (Toolbar) findViewById(R.id.editProfileToolbar);
     }
 
 }

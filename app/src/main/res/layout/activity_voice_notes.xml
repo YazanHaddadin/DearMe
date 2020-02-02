@@ -7,12 +7,38 @@
     android:layout_height="match_parent"
     tools:context=".VoiceNotesActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/voiceNotesToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:layout_marginBottom="20dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="Dear Me"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
     <ListView
         android:id="@+id/lvVoiceNotes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="#000"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp"
+        android:layout_below="@id/voiceNotesToolbar"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addNewBtn"

@@ -7,6 +7,32 @@
     tools:context=".RecordActivity"
     android:background="@color/colorPrimary">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/recordToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:layout_marginBottom="20dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="Dear Me"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+
     <Button
         android:id="@+id/recordBtn"
         android:layout_width="250dp"

@@ -2,6 +2,7 @@ package com.me.dear;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -26,9 +27,9 @@ import java.util.UUID;
 public class RecordActivity extends AppCompatActivity {
 
     Button recordBtn, recordingBtn, playBtn, stopBtn;
+    Toolbar toolbar;
 
     public static String pathSave = "_dearme_recording.3gp";
-    //String file = ContextCompat.getExternalFilesDirs(getApplicationContext(),null)[0].getAbsolutePath();
 
     final int REQUEST_PERMISSION_CODE = 1000;
 
@@ -48,9 +49,8 @@ public class RecordActivity extends AppCompatActivity {
             requestPermission();
 
         assignUI();
-
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,9 +173,6 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case android.R.id.home:
-                finish();
-                return true;
 
             case R.id.goToUserProfile:
                 startActivity(new Intent(getBaseContext(), ProfileActivity.class));
@@ -230,5 +227,6 @@ public class RecordActivity extends AppCompatActivity {
         recordingBtn = (Button) findViewById(R.id.recordingBtn);
         playBtn = (Button) findViewById(R.id.playBtn);
         stopBtn = (Button) findViewById(R.id.stopBtn);
+        toolbar = (Toolbar) findViewById(R.id.recordToolbar);
     }
 }
