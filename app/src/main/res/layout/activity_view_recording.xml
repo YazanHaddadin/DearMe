@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewRecordingActivity"
+    android:background="@drawable/custom_border">
+
+    <ImageView
+        android:id="@+id/ivProfileLogoNVR"
+        android:layout_width="160dp"
+        android:layout_height="75dp"
+        app:srcCompat="@drawable/im_dear_me_logo"
+        android:layout_marginBottom="13dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/etNameVoiceRecording"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/ivProfileLogoNVR"
+        android:ems="13"
+        android:hint="My Voice Recording"
+        android:inputType="text"
+        android:textColorHighlight="#50BAF0"
+        />
+
+    <ImageView
+        android:id="@+id/ivPlayBtnVR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_media_play"
+        android:layout_below="@id/etNameVoiceRecording"
+        android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@id/etNameVoiceRecording"
+        android:layout_alignStart="@id/etNameVoiceRecording"
+        android:layout_marginTop="42.5dp"/>
+
+    <SeekBar
+        android:id="@+id/recordingSeekBar"
+        android:layout_toRightOf="@id/ivPlayBtnVR"
+        android:layout_toEndOf="@id/ivPlayBtnVR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/etNameVoiceRecording"
+        android:layout_marginTop="50dp"
+        android:layout_toLeftOf="@id/tvDuration"
+        android:layout_toStartOf="@id/tvDuration" />
+
+    <TextView
+        android:id="@+id/tvDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/etNameVoiceRecording"
+        android:layout_alignEnd="@id/etNameVoiceRecording"
+        android:layout_below="@id/etNameVoiceRecording"
+        android:layout_marginTop="50dp"
+        android:text="2:00"/>
+
+    <TextView
+        android:id="@+id/tvCancelBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/etNameVoiceRecording"
+        android:layout_alignStart="@id/etNameVoiceRecording"
+        android:text="CANCEL"
+        android:textColor="@color/colorRed"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        />
+
+    <TextView
+        android:id="@+id/tvSaveVRBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/etNameVoiceRecording"
+        android:layout_alignEnd="@id/etNameVoiceRecording"
+        android:text="SAVE"
+        android:textColor="@color/colorRed"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:textStyle="bold"
+        />
+
+
+</RelativeLayout>

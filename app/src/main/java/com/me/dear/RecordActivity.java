@@ -5,38 +5,48 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class RecordActivity extends AppCompatActivity {
 
-    Button recordBtn, recordingBtn, playBtn, stopBtn;
+    Button recordBtn;
+    TextView stopBtn, pauseBtn, resumeBtn;
     Toolbar toolbar;
 
-    public static String pathSave = "_dearme_recording.3gp";
+    String pathSave;
 
     final int REQUEST_PERMISSION_CODE = 1000;
 
     MediaRecorder mediaRecorder;
-    MediaPlayer mediaPlayer;
     private FirebaseAuth firebaseAuth;
 
+    //FIX GOING BACK TO RECORD SCREEN, FIX THE BAR TO WORK WITH PAUSE AND CHANGE SECONDS
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +61,9 @@ public class RecordActivity extends AppCompatActivity {
         assignUI();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        final RelativeLayout recordPageLayout = (RelativeLayout) findViewById(R.id.recordPageLayout);
+        recordPageLayout.setAlpha(1);
 
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,16 +80,17 @@ public class RecordActivity extends AppCompatActivity {
                         mediaRecorder.prepare();
                         mediaRecorder.start();
                     }catch (IOException e){
-                        e.printStackTrace();
+                        System.out.println(e.getMessage() + " WHY!!!!");
                     }
 
-                    playBtn.setEnabled(false);
-                    stopBtn.setEnabled(false);
+                    pauseBtn.setVisibility(View.VISIBLE);
+                    stopBtn.setVisibility(View.VISIBLE);
+                    recordBtn.setBackgroundResource(R.drawable.im_recording);
+                    ColorStateList stateList = ColorStateList.valueOf(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+                    recordBtn.setBackgroundTintList(stateList);
+                    recordBtn.setEnabled(false);
 
                     Toast.makeText(RecordActivity.this, "RECORDING", Toast.LENGTH_SHORT).show();
-                    recordBtn.setVisibility(View.INVISIBLE);
-                    recordingBtn.setVisibility(View.VISIBLE);
-
 
                 }else{
                     requestPermission();
@@ -84,44 +98,88 @@ public class RecordActivity extends AppCompatActivity {
             }
             });
 
-            recordingBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mediaRecorder.stop();
+        stopBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        stopBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
+                        break;
 
-                    Toast.makeText(RecordActivity.this, "STOPPED", Toast.LENGTH_SHORT).show();
-                    recordBtn.setVisibility(View.VISIBLE);
-                    recordingBtn.setVisibility(View.INVISIBLE);
-                    playBtn.setEnabled(true);
-                    stopBtn.setEnabled(false);
+                    case MotionEvent.ACTION_UP:
+                        mediaRecorder.stop();
+                        recordPageLayout.setAlpha(0.2f);
+
+                        Intent viewRcdAct = new Intent(getBaseContext(), ViewRecordingActivity.class);
+                        viewRcdAct.putExtra("savePath", pathSave);
+                        startActivity(viewRcdAct);
+                        break;
+
+                    case MotionEvent.ACTION_CANCEL:
+                        recordPageLayout.setAlpha(1);
+                        stopBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorWhite, null));
                 }
-            });
+                return true;
+            }
+        });
 
-            playBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    stopBtn.setEnabled(true);
-                    recordBtn.setEnabled(false);
-                    recordingBtn.setVisibility(View.INVISIBLE);
+        pauseBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        pauseBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
+                        break;
 
-                    mediaPlayer = new MediaPlayer();
-                    try {
-                        mediaPlayer.setDataSource(pathSave);
-                        mediaPlayer.prepare();
-                    }catch (IOException e){
-                        Toast.makeText(RecordActivity.this, "Error" + e, Toast.LENGTH_SHORT).show();
-                    }
+                    case MotionEvent.ACTION_UP:
+                        mediaRecorder.pause();
+                        Toast.makeText(RecordActivity.this, "PAUSED", Toast.LENGTH_SHORT).show();
 
-                    mediaPlayer.start();
+                        pauseBtn.setVisibility(View.INVISIBLE);
+                        pauseBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorWhite, null));
+                        resumeBtn.setVisibility(View.VISIBLE);
+                        break;
+
+                    case MotionEvent.ACTION_CANCEL:
+                        pauseBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorWhite, null));
                 }
-            });
+                return true;
+            }
+        });
 
+        resumeBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        resumeBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        mediaRecorder.resume();
+                        Toast.makeText(RecordActivity.this, "RESUMED", Toast.LENGTH_SHORT).show();
+
+                        resumeBtn.setVisibility(View.INVISIBLE);
+                        resumeBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorWhite, null));
+                        pauseBtn.setVisibility(View.VISIBLE);
+                        break;
+
+                    case MotionEvent.ACTION_CANCEL:
+                        resumeBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorWhite, null));
+                }
+                return true;
+            }
+        });
+/**
             stopBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     stopBtn.setEnabled(false);
                     recordBtn.setEnabled(true);
-                    recordingBtn.setVisibility(View.INVISIBLE);
+                    stopRecordBtn.setVisibility(View.INVISIBLE);
 
                     if(mediaPlayer!=null){
                         mediaPlayer.stop();
@@ -129,7 +187,7 @@ public class RecordActivity extends AppCompatActivity {
                         setUpMediaRecorder();
                     }
                 }
-            });
+            });**/
     }
 
     private void setUpMediaRecorder() {
@@ -205,6 +263,9 @@ public class RecordActivity extends AppCompatActivity {
             finish();
             startActivity(new Intent(getBaseContext(), LoginActivity.class));
         }
+
+        RelativeLayout rcrd = (RelativeLayout) findViewById(R.id.recordPageLayout);
+        rcrd.setAlpha(1);
     }
 
     private void checkUserAuth(){
@@ -224,9 +285,9 @@ public class RecordActivity extends AppCompatActivity {
 
     void assignUI(){
         recordBtn = (Button) findViewById(R.id.recordBtn);
-        recordingBtn = (Button) findViewById(R.id.recordingBtn);
-        playBtn = (Button) findViewById(R.id.playBtn);
-        stopBtn = (Button) findViewById(R.id.stopBtn);
+        pauseBtn = (TextView) findViewById(R.id.tvPauseBtn);
+        stopBtn = (TextView) findViewById(R.id.tvStopBtn);
+        resumeBtn = (TextView) findViewById(R.id.tvResumeBtn);
         toolbar = (Toolbar) findViewById(R.id.recordToolbar);
     }
 }

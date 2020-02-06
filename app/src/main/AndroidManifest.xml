@@ -23,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditProfileActivity"/>
+        <activity android:name=".EditProfileActivity" />
         <activity
             android:name=".VerificationEmailActivity"
             android:theme="@style/VerifyTheme" />
@@ -34,6 +34,9 @@
         <activity android:name=".RecordActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".VoiceNotesActivity" />
+        <activity
+            android:name=".ViewRecordingActivity"
+            android:theme="@style/VerifyTheme"/>
     </application>
 
 </manifest>

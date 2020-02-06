@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VerificationEmailActivity"
-    android:background="@drawable/cutom_border">
+    android:background="@drawable/custom_border">
 
     <ImageView
         android:id="@+id/ivProfileLogoVE"
@@ -23,8 +23,6 @@
         android:text="Enter your account email below:"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginRight="60dp"
         android:layout_below="@id/ivProfileLogoVE"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"/>
@@ -62,8 +60,6 @@
         android:text="If you already received the email:"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginRight="60dp"
         android:layout_below="@id/resetEmailBtn"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"

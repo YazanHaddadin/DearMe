@@ -6,4 +6,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="buttonColor">#9250BAF0</color>
     <color name="chipColor">#E7E9E9</color>
+    <color name="colorRed">#B10000</color>
 </resources>
