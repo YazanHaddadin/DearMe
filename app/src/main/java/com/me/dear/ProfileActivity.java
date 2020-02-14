@@ -42,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     ArrayAdapter<UserProfileInfo> adapter;
 
     private FirebaseAuth firebaseAuth;
-    DatabaseHelper mDatabaseHelper;
+    DatabaseHelperProfile mDatabaseHelperProfile;
 
     ProgressDialog progressDialog;
     ImageView userProfile;
@@ -72,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference("users/" + firebaseAuth.getUid());
 
-        mDatabaseHelper = new DatabaseHelper(this);
+        mDatabaseHelperProfile = new DatabaseHelperProfile(this);
 
         nullifyList(userArrayList);
         populateData();
@@ -165,7 +165,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void addData(String uid, String username, String email, String gender, String dob){
-        boolean insertedData = mDatabaseHelper.addData(uid, username, email, gender, dob);
+        boolean insertedData = mDatabaseHelperProfile.addData(uid, username, email, gender, dob);
 
         if (insertedData)
             Log.d(TAG, "Successfully added into database");
@@ -174,7 +174,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void populateData(){
-        Cursor cursor = mDatabaseHelper.getData();
+        Cursor cursor = mDatabaseHelperProfile.getData();
 
         if(cursor.getCount() == 0)
             nullifyList(userArrayList);
@@ -197,7 +197,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void deleteAccount(){
         firebaseAuth = FirebaseAuth.getInstance();
-        getBaseContext().deleteDatabase(mDatabaseHelper.getDatabaseName());
+        getBaseContext().deleteDatabase(mDatabaseHelperProfile.getDatabaseName());
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference("users");
         myRef.child(firebaseAuth.getCurrentUser().getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {

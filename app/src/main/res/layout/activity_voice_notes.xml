@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorAccent"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="5dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -36,12 +36,12 @@
         android:id="@+id/lvVoiceNotes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="#000"
+        android:divider="@color/colorPrimaryDark"
         android:dividerHeight="1dp"
         android:layout_below="@id/voiceNotesToolbar"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addNewBtn"
+        android:id="@+id/goToRecord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

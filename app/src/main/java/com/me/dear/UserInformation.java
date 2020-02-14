@@ -1,5 +1,7 @@
 package com.me.dear;
 
+import java.util.ArrayList;
+
 public class UserInformation {
     private String userEmail;
     private String userName;
@@ -7,6 +9,7 @@ public class UserInformation {
     private String userDOB;
 
     public UserInformation() {
+
     }
 
     UserInformation(String userEmail, String userName, String userGender, String userDOB) {
@@ -47,4 +50,5 @@ public class UserInformation {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
 }

@@ -7,47 +7,65 @@
     android:layout_height="match_parent"
     tools:context=".VoiceNotesActivity">
 
+    <TextView
+        android:id="@+id/tvVRName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="23dp"
+        android:ems="13"
+        android:text="Voice Recording 1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        />
+
     <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@mipmap/ic_launcher"
-        android:id="@+id/image"
-        android:layout_alignParentLeft="true"
+        android:id="@+id/ivPlayBtnVNA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_media_play"
+        android:layout_below="@id/tvVRName"
         android:layout_alignParentStart="true"
-        android:padding="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        android:visibility="visible"
+        />
+
+    <ImageView
+        android:id="@+id/ivPauseBtnVNA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_media_pause"
+        android:layout_below="@id/tvVRName"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="20dp"
+        android:visibility="invisible"
+        />
+
+    <SeekBar
+        android:id="@+id/recordingSeekBarVNA"
+        android:layout_toEndOf="@id/ivPlayBtnVNA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tvVRName"
+        android:layout_marginTop="12.5dp"
+        android:layout_toStartOf="@id/tvDurationVNA"
         />
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/tvDurationVNA"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/itemName"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@id/image"
-        android:layout_toEndOf="@id/image"
-        android:text="name"
-        android:paddingLeft="10dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:paddingRight="10dp"
-        android:textSize="26sp"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/price"
-        android:text="price"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/itemName"
-        android:layout_toRightOf="@id/image"
-        android:layout_toEndOf="@id/image"
-        android:paddingLeft="10dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:paddingRight="10dp"
-        android:textSize="26sp"
+        android:layout_marginEnd="20dp"
+        android:layout_below="@id/tvVRName"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:text="2:00"
         />
 
 </RelativeLayout>

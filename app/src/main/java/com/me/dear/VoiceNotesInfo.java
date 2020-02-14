@@ -1,22 +1,31 @@
 package com.me.dear;
 
 public class VoiceNotesInfo {
-    private String name,price;
-    private int imageId;
+    private String name,path;
+    private int duration;
+
     public VoiceNotesInfo(){}
 
-    public VoiceNotesInfo(String name, String price, int imageId){
+    public VoiceNotesInfo(String name, String path, int duration){
         this.name = name;
-        this.price = price;
-        this.imageId = imageId;
+        this.path = path;
+        this.duration = duration;
     }
 
-    public String getPrice() {
-        return price;
+    public String getPath() {
+        return path;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public String getName() {
@@ -25,13 +34,5 @@ public class VoiceNotesInfo {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getImageId() {
-        return imageId;
-    }
-
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
     }
 }

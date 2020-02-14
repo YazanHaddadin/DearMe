@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewRecordingActivity"
+    tools:context=".SaveVoiceNoteActivity"
     android:background="@drawable/custom_border">
 
     <ImageView
@@ -36,20 +36,31 @@
         android:src="@android:drawable/ic_media_play"
         android:layout_below="@id/etNameVoiceRecording"
         android:layout_centerHorizontal="true"
-        android:layout_alignLeft="@id/etNameVoiceRecording"
         android:layout_alignStart="@id/etNameVoiceRecording"
-        android:layout_marginTop="42.5dp"/>
+        android:layout_marginTop="42.5dp"
+        android:visibility="visible"
+        />
+
+    <ImageView
+        android:id="@+id/ivPauseBtnVR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_media_pause"
+        android:layout_below="@id/etNameVoiceRecording"
+        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@id/etNameVoiceRecording"
+        android:layout_marginTop="42.5dp"
+        android:visibility="invisible"
+        />
 
     <SeekBar
         android:id="@+id/recordingSeekBar"
-        android:layout_toRightOf="@id/ivPlayBtnVR"
         android:layout_toEndOf="@id/ivPlayBtnVR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/etNameVoiceRecording"
         android:layout_marginTop="50dp"
-        android:layout_toLeftOf="@id/tvDuration"
         android:layout_toStartOf="@id/tvDuration" />
 
     <TextView
@@ -66,7 +77,6 @@
         android:id="@+id/tvCancelBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/etNameVoiceRecording"
         android:layout_alignStart="@id/etNameVoiceRecording"
         android:text="CANCEL"
         android:textColor="@color/colorRed"
@@ -74,14 +84,13 @@
         android:layout_centerHorizontal="true"
         android:textSize="20sp"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         />
 
     <TextView
         android:id="@+id/tvSaveVRBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@id/etNameVoiceRecording"
         android:layout_alignEnd="@id/etNameVoiceRecording"
         android:text="SAVE"
         android:textColor="@color/colorRed"
@@ -89,7 +98,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="20sp"
         android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:textStyle="bold"
         />
 

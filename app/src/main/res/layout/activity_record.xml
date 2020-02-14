@@ -40,7 +40,8 @@
         android:layout_marginBottom="100dp"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/tvPauseBtn"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        />
 
     <TextView
         android:id="@+id/tvPauseBtn"
@@ -51,10 +52,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/recordBtn"
         android:layout_marginBottom="100dp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:visibility="invisible"
+        android:visibility="visible"
         />
 
     <TextView
@@ -81,10 +82,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/recordBtn"
         android:layout_marginBottom="100dp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:visibility="invisible"
+        android:visibility="visible"
         />
 
 </RelativeLayout>

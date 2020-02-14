@@ -35,7 +35,7 @@
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".VoiceNotesActivity" />
         <activity
-            android:name=".ViewRecordingActivity"
+            android:name=".SaveVoiceNoteActivity"
             android:theme="@style/VerifyTheme"/>
     </application>
 

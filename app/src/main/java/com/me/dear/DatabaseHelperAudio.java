@@ -8,25 +8,24 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = "DatabaseHelper";
+public class DatabaseHelperAudio extends SQLiteOpenHelper {
+    private static final String TAG = "DatabaseHelperAudio";
 
-    private static final String TABLE_NAME = "user_profile";
+    private static final String TABLE_NAME = "audio";
 
     private static final String COL0 = "UID";
-    private static final String COL1 = "USERNAME";
-    private static final String COL2 = "EMAIL";
-    private static final String COL3 = "GENDER";
-    private static final String COL4 = "DOB";
+    private static final String COL1 = "NAME";
+    private static final String COL2 = "PATH";
+    private static final String COL3 = "DURATION";
 
-    public DatabaseHelper(@Nullable Context context) {
+    public DatabaseHelperAudio(@Nullable Context context) {
         super(context, TABLE_NAME, null,1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL0 + " TEXT PRIMARY KEY, " +
-                COL1 + " TEXT, " + COL2 + " TEXT, " + COL3 + " varchar(8), " + COL4 + " varchar(20))";
+                COL1 + " TEXT, " + COL2 + " TEXT, " + COL3 + " INTEGER)";
         db.execSQL(createTable);
     }
 
@@ -36,14 +35,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addData(String uid, String username, String email, String gender, String dob){
+    public boolean addData(String uid, String name, String path, int duration){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL0, uid);
-        contentValues.put(COL1, username);
-        contentValues.put(COL2, email);
-        contentValues.put(COL3, gender);
-        contentValues.put(COL4, dob);
+        contentValues.put(COL1, name);
+        contentValues.put(COL2, path);
+        contentValues.put(COL3, duration);
 
         long res = db.insertWithOnConflict(TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
 

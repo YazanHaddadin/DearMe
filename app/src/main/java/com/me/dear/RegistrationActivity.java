@@ -28,8 +28,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -38,12 +36,9 @@ import java.util.Locale;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-
     private static final String TAG = "Registration_Activity";
 
-    private FirebaseStorage firebaseStorage;
     private FirebaseAuth firebaseAuth;
-    private StorageReference storageReference;
     private ProgressDialog progressDialog;
 
     EditText userName, password, confirmPassword, email, dateOfBirth;
@@ -52,7 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
     ChipGroup chipGroup;
     Calendar c;
     DatePickerDialog dpd;
-    DatabaseHelper mDatabaseHelper;
+    DatabaseHelperProfile mDatabaseHelperProfile;
     String userGender, userDOB;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -64,9 +59,8 @@ public class RegistrationActivity extends AppCompatActivity {
         assignUIComp();
 
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-        mDatabaseHelper = new DatabaseHelper(this);
+
+        mDatabaseHelperProfile = new DatabaseHelperProfile(this);
         progressDialog = new ProgressDialog(this);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
@@ -221,7 +215,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void addData(String uid, String username, String email, String gender, String dob){
-        boolean insertedData = mDatabaseHelper.addData(uid, username, email, gender, dob);
+        boolean insertedData = mDatabaseHelperProfile.addData(uid, username, email, gender, dob);
 
         if (insertedData)
             Log.d(TAG, "Successfully added into database");

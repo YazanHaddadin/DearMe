@@ -1,19 +1,29 @@
 package com.me.dear;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class VoiceNotesAdapter extends ArrayAdapter<VoiceNotesInfo> {
     private List<VoiceNotesInfo> items;
+    private MediaPlayer mediaPlayer;
+    private int length=0;
 
     VoiceNotesAdapter(Context context, ArrayList<VoiceNotesInfo> objects) {
         super(context, 0, objects);
@@ -28,23 +38,63 @@ public class VoiceNotesAdapter extends ArrayAdapter<VoiceNotesInfo> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.view_item, parent, false);
         }
 
-        TextView listItemName  = (TextView) convertView.findViewById(R.id.itemName);
-        TextView listItemPrice  = (TextView) convertView.findViewById(R.id.price);
-        final ImageView  listItemImage    = (ImageView) convertView.findViewById(R.id.image);
+        TextView voiceName  = (TextView) convertView.findViewById(R.id.tvVRName);
+        TextView duration  = (TextView) convertView.findViewById(R.id.tvDurationVNA);
+        SeekBar seekBar = (SeekBar) convertView.findViewById(R.id.recordingSeekBarVNA);
+        final ImageView  playBtn    = (ImageView) convertView.findViewById(R.id.ivPlayBtnVNA);
+        final ImageView pauseBtn = (ImageView) convertView.findViewById(R.id.ivPauseBtnVNA);
 
-        listItemName.setText(item.getName());
-        listItemPrice.setText(item.getPrice());
-        listItemImage.setImageResource(item.getImageId());
+        voiceName.setText(item.getName());
 
-        listItemImage.setOnClickListener(new View.OnClickListener() {
+        setUpMediaPlayer(item.getPath(), duration, seekBar);
+
+        playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer lI[] = {R.drawable.ic_launcher_background, R.drawable.ic_launcher_foreground, R.mipmap.ic_launcher};
-                Random rand = new Random();
-                listItemImage.setImageResource(lI[rand.nextInt(lI.length)]);
+                if(mediaPlayer !=null) {
+                    mediaPlayer.seekTo(length);
+                    mediaPlayer.start();
+                    playBtn.setVisibility(View.INVISIBLE);
+                    pauseBtn.setVisibility(View.VISIBLE);
+                }
             }
         });
 
+        pauseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mediaPlayer != null) {
+                    mediaPlayer.pause();
+                    length = mediaPlayer.getCurrentPosition();
+                    playBtn.setVisibility(View.VISIBLE);
+                    pauseBtn.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+       /** try {
+            VoiceNotesActivity.ins.moveSeekBar(mediaPlayer, seekBar, duration, playBtn, pauseBtn);
+        }catch (Exception e){e.printStackTrace();}**/
+
         return convertView;
+    }
+
+    private void setUpMediaPlayer(String pathSave, TextView durationTxt, SeekBar sb){
+        mediaPlayer = new MediaPlayer();
+
+        try {
+            mediaPlayer.setDataSource(pathSave);
+            mediaPlayer.prepare();
+            @SuppressLint("DefaultLocale") String time = String.format("%d:%02d",
+                    TimeUnit.MILLISECONDS.toMinutes(mediaPlayer.getDuration()),
+                    TimeUnit.MILLISECONDS.toSeconds(mediaPlayer.getDuration()) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mediaPlayer.getDuration()))
+            );
+
+            durationTxt.setText(time);
+            sb.setMax(mediaPlayer.getDuration());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

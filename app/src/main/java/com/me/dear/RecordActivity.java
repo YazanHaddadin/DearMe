@@ -12,10 +12,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -29,7 +27,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class RecordActivity extends AppCompatActivity {
 
@@ -83,8 +80,8 @@ public class RecordActivity extends AppCompatActivity {
                         System.out.println(e.getMessage() + " WHY!!!!");
                     }
 
-                    pauseBtn.setVisibility(View.VISIBLE);
-                    stopBtn.setVisibility(View.VISIBLE);
+                    pauseBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorWhite, null));
+                    stopBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorWhite, null));
                     recordBtn.setBackgroundResource(R.drawable.im_recording);
                     ColorStateList stateList = ColorStateList.valueOf(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
                     recordBtn.setBackgroundTintList(stateList);
@@ -109,9 +106,18 @@ public class RecordActivity extends AppCompatActivity {
 
                     case MotionEvent.ACTION_UP:
                         mediaRecorder.stop();
-                        recordPageLayout.setAlpha(0.2f);
+                        mediaRecorder.release();
+                        recordPageLayout.setAlpha(0.8f);
+                        recordBtn.setBackgroundResource(R.drawable.im_microphone);
+                        recordBtn.setBackgroundTintList(null);
+                        recordBtn.setEnabled(true);
+                        stopBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorWhite, null));
+                        pauseBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+                        stopBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+                        pauseBtn.setVisibility(View.VISIBLE);
+                        resumeBtn.setVisibility(View.INVISIBLE);
 
-                        Intent viewRcdAct = new Intent(getBaseContext(), ViewRecordingActivity.class);
+                        Intent viewRcdAct = new Intent(getBaseContext(), SaveVoiceNoteActivity.class);
                         viewRcdAct.putExtra("savePath", pathSave);
                         startActivity(viewRcdAct);
                         break;

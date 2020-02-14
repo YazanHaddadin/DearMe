@@ -1,39 +1,79 @@
 package com.me.dear;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.speech.tts.Voice;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.concurrent.TimeUnit;
 
 public class VoiceNotesActivity extends AppCompatActivity {
 
-    ArrayList<VoiceNotesInfo> arL;
+    public static VoiceNotesActivity ins;
+
+    private static ArrayList<VoiceNotesInfo> voiceNotesList;
+
     private FirebaseAuth firebaseAuth;
-    FloatingActionButton addNewItem;
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
+    private DatabaseHelperAudio mDatabaseHelperAudio;
+    private ArrayAdapter<VoiceNotesInfo> adapter;
+    private ProgressDialog progressDialog;
+    MediaPlayer mediaPlayer;
+
+    FloatingActionButton goToRecord;
+    boolean go=true;
     Toolbar toolbar;
+    String vnName="", vnPath="";
+    ArrayList<StorageReference> referencesVN;
+    ArrayList<String> vnNames;
+    int vnDuration = 0, noOfVn=0;
+    boolean done=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice_notes);
 
-        arL = new ArrayList<>();
+        voiceNotesList = new ArrayList<>();
+        vnNames = new ArrayList<>();
+        referencesVN = new ArrayList<>();
 
         insUIItems();
         setSupportActionBar(toolbar);
@@ -42,41 +82,170 @@ public class VoiceNotesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        checkUserAuth();
-
-        populateList(arL);
-
-        ArrayAdapter<VoiceNotesInfo> adapter = new VoiceNotesAdapter(this, arL);
+        adapter = new VoiceNotesAdapter(this, voiceNotesList);
         ListView lv = (ListView) findViewById(R.id.lvVoiceNotes);
 
         lv.setAdapter(adapter);
 
-        addNewItem.setOnClickListener(new View.OnClickListener() {
+        progressDialog = new ProgressDialog(this);
+        mDatabaseHelperAudio = new DatabaseHelperAudio(this);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference myR = firebaseStorage.getReference(firebaseAuth.getUid() + "/audio");
+
+        myR.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+            @Override
+            public void onSuccess(ListResult listResult) {
+                for (final StorageReference reference : listResult.getItems()) {
+                    noOfVn+=1;
+                    String[] str = reference.toString().split("/");
+
+                    vnName = str[str.length - 1];
+                    referencesVN.add(reference);
+                    vnNames.add(vnName);
+                }
+            }
+        }).addOnCompleteListener(new OnCompleteListener<ListResult>() {
+            @Override
+            public void onComplete(@NonNull Task<ListResult> task) {
+                populateData();
+            }
+        });
+
+        //nullifyList(voiceNotesList);
+
+        checkUserAuth();
+
+        //voiceNotesList.add(new VoiceNotesInfo(VNname, VNpath, 256));
+
+        goToRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText taskEditText = new EditText(VoiceNotesActivity.this);
-                AlertDialog dialog = new AlertDialog.Builder(VoiceNotesActivity.this)
-                        .setTitle("Name your voice note..")
-                        .setMessage("Type 2 items such as: Yazan Haddadin")
-                        .setView(taskEditText)
-                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String task = String.valueOf(taskEditText.getText());
-                                String list[] = task.split(" ");
-                                arL.add(new VoiceNotesInfo(list[0], list[1], R.drawable.ic_launcher_foreground));
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                dialog.show();
+                go = false;
+                startActivity(new Intent(getBaseContext(), RecordActivity.class));
             }
         });
     }
 
-    private void populateList(ArrayList<VoiceNotesInfo> ar){
-        ar.add(new VoiceNotesInfo("Lorem", "Ipsum", R.drawable.ic_launcher_foreground));
+    public void moveSeekBar(final MediaPlayer mediaPlayer, final SeekBar seekBar, final TextView durationTxt, final ImageView playBtn, final ImageView pauseBtn){
+        final Handler mHandler = new Handler();
+        VoiceNotesActivity.this.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if(go) {
+                    if (mediaPlayer != null) {
+                        try {
+                            int mCurrentPosition = mediaPlayer.getCurrentPosition();
+                            seekBar.setProgress(mCurrentPosition);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
+                        }
+
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            if (mediaPlayer != null) {
+                                if(progress / 10 == mediaPlayer.getDuration() / 10){
+                                    playBtn.setVisibility(View.VISIBLE);
+                                    pauseBtn.setVisibility(View.INVISIBLE);
+                                    mediaPlayer.seekTo(0);
+                                }
+
+                                if (fromUser)
+                                    mediaPlayer.seekTo(progress);
+
+                                @SuppressLint("DefaultLocale") String time = String.format("%d:%02d",
+                                        TimeUnit.MILLISECONDS.toMinutes(progress),
+                                        TimeUnit.MILLISECONDS.toSeconds(progress) -
+                                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(progress))
+                                );
+                                durationTxt.setText(time);
+                            }
+                        }
+                    });
+                    mHandler.postDelayed(this, 100);
+                }
+            }
+        });
+    }
+
+    public void populateData(){
+        final Cursor cursor = mDatabaseHelperAudio.getData();
+        done = false;
+        progressDialog.setMessage("Getting your data..");
+        progressDialog.show();
+
+        while (cursor.moveToNext()) {
+            if(cursor.getString(0).equals(firebaseAuth.getUid())) {
+                //voiceNotesList.set(i,new VoiceNotesInfo(cursor.getString(1), cursor.getString(2),
+                //cursor.getInt(3)));
+                //System.out.println(i + " " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getInt(3));
+                vnPath = cursor.getString(2);
+            }
+            else
+                nullifyList(voiceNotesList);
+        }
+
+        for (int i=0; i<vnNames.size(); i++){
+            final int finalI = i;
+            referencesVN.get(i).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    mediaPlayer = new MediaPlayer();
+                    try {
+                        mediaPlayer.setDataSource(uri.toString());
+                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mp) {
+                                mp.start();
+                                progressDialog.dismiss();
+                                vnDuration = mp.getDuration();
+                                voiceNotesList.add(new VoiceNotesInfo(vnNames.get(finalI), vnPath, vnDuration)); //FIX ADAPTER DURATION AND SEEK
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                        mediaPlayer.prepare();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            System.out.println(vnNames.get(i));
+        }
+
+        if(cursor.getCount() == 0)
+            nullifyList(voiceNotesList);
+
+        else{
+        }
+
+        cursor.close();
+    }
+
+    private void nullifyList(ArrayList<VoiceNotesInfo> aL){
+        if(aL.isEmpty()) {
+            for (int i =0; i < noOfVn; i++){
+                aL.add(new VoiceNotesInfo("", "", 0));
+            }
+        }else{
+            for (int i =0; i < noOfVn; i++){
+                aL.set(i, new VoiceNotesInfo("", "", 0));
+            }
+        }
     }
 
     @Override
@@ -93,13 +262,16 @@ public class VoiceNotesActivity extends AppCompatActivity {
                 return true;
 
             case R.id.goToUserProfile:
+                go=false;
                 startActivity(new Intent(getBaseContext(), ProfileActivity.class));
                 return true;
             case R.id.changeAct:
+                go=false;
                 startActivity(new Intent(getBaseContext(), RecordActivity.class));
                 return true;
 
             case R.id.logOutBtn:
+                go=false;
                 Toast.makeText(getBaseContext(), "Logging out..", Toast.LENGTH_SHORT).show();
                 firebaseAuth.signOut();
                 finish();
@@ -132,6 +304,7 @@ public class VoiceNotesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        go = true;
         if(firebaseAuth.getCurrentUser() == null){
             finish();
             startActivity(new Intent(getBaseContext(), LoginActivity.class));
@@ -139,7 +312,7 @@ public class VoiceNotesActivity extends AppCompatActivity {
     }
 
     private void insUIItems(){
-        addNewItem = (FloatingActionButton) findViewById(R.id.addNewBtn);
+        goToRecord = (FloatingActionButton) findViewById(R.id.goToRecord);
         toolbar = (Toolbar) findViewById(R.id.voiceNotesToolbar);
     }
 }
