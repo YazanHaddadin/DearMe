@@ -218,15 +218,22 @@ public class SaveVoiceNoteActivity extends AppCompatActivity {
     }
 
     private void uploadRecording(){
-        progressDialog.setMessage("Saving Recording..");
-        progressDialog.show();
+        //progressDialog.setMessage("Saving Recording..");
+        //progressDialog.show();
         name = voiceNoteName.getText().toString();
 
         StorageReference audioRef = storageReference.child(firebaseAuth.getUid()).child("audio").child(name);
         Uri audioPath = Uri.fromFile(new File(pathSave));
-        UploadTask uploadTask = audioRef.putFile(audioPath);
+        //UploadTask uploadTask = audioRef.putFile(audioPath);
 
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+        addData(firebaseAuth.getUid(), name, pathSave, vnDur);
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        finish();
+        startActivity(new Intent(getBaseContext(), VoiceNotesActivity.class));
+        go = false;
+
+        /**uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 System.out.println("DID NOT WORK!!" + e.getMessage());
@@ -237,11 +244,13 @@ public class SaveVoiceNoteActivity extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 System.out.println("OKK!!");
                 addData(firebaseAuth.getUid(), name, pathSave, vnDur);
+                mediaPlayer.stop();
+                mediaPlayer.release();
                 finish();
                 startActivity(new Intent(getBaseContext(), VoiceNotesActivity.class));
                 progressDialog.dismiss();
             }
-        });
+        });**/
     }
 
     private void addData(String uid, String name, String path, int duration){

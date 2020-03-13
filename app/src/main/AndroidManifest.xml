@@ -37,6 +37,7 @@
         <activity
             android:name=".SaveVoiceNoteActivity"
             android:theme="@style/VerifyTheme"/>
+        <activity android:name=".PlayVoiceNotes" />
     </application>
 
 </manifest>

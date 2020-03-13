@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -75,7 +76,12 @@ public class ProfileActivity extends AppCompatActivity {
         mDatabaseHelperProfile = new DatabaseHelperProfile(this);
 
         nullifyList(userArrayList);
-        populateData();
+
+        try{
+            populateData();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -246,6 +252,12 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
             startActivity(new Intent(getBaseContext(), LoginActivity.class));
         }
+    }
+
+    private boolean checkDBExist(Context context, String dbname){
+        File dbFile = context.getDatabasePath(dbname);
+
+        return dbFile.exists();
     }
 
     private void assignUIElements(){

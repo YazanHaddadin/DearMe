@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.Voice;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,9 +63,9 @@ public class VoiceNotesActivity extends AppCompatActivity {
     Toolbar toolbar;
     String vnName="", vnPath="";
     ArrayList<StorageReference> referencesVN;
-    ArrayList<String> vnNames;
+    ArrayList<String> vnNames, vnPaths;
+    ArrayList<Integer> vnDurations;
     int vnDuration = 0, noOfVn=0;
-    boolean done=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,9 @@ public class VoiceNotesActivity extends AppCompatActivity {
 
         voiceNotesList = new ArrayList<>();
         vnNames = new ArrayList<>();
+        vnPaths = new ArrayList<>();
         referencesVN = new ArrayList<>();
+        vnDurations = new ArrayList<>();
 
         insUIItems();
         setSupportActionBar(toolbar);
@@ -87,13 +90,16 @@ public class VoiceNotesActivity extends AppCompatActivity {
 
         lv.setAdapter(adapter);
 
+        //this.deleteDatabase("audio");
+
         progressDialog = new ProgressDialog(this);
         mDatabaseHelperAudio = new DatabaseHelperAudio(this);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         StorageReference myR = firebaseStorage.getReference(firebaseAuth.getUid() + "/audio");
+        checkUserAuth();
 
-        myR.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+        /**myR.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
             @Override
             public void onSuccess(ListResult listResult) {
                 for (final StorageReference reference : listResult.getItems()) {
@@ -110,13 +116,9 @@ public class VoiceNotesActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<ListResult> task) {
                 populateData();
             }
-        });
+        });**/
 
-        //nullifyList(voiceNotesList);
-
-        checkUserAuth();
-
-        //voiceNotesList.add(new VoiceNotesInfo(VNname, VNpath, 256));
+        populateData();
 
         goToRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,78 +129,33 @@ public class VoiceNotesActivity extends AppCompatActivity {
         });
     }
 
-    public void moveSeekBar(final MediaPlayer mediaPlayer, final SeekBar seekBar, final TextView durationTxt, final ImageView playBtn, final ImageView pauseBtn){
-        final Handler mHandler = new Handler();
-        VoiceNotesActivity.this.runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                if(go) {
-                    if (mediaPlayer != null) {
-                        try {
-                            int mCurrentPosition = mediaPlayer.getCurrentPosition();
-                            seekBar.setProgress(mCurrentPosition);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-                        @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
-
-                        }
-
-                        @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
-
-                        }
-
-                        @Override
-                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            if (mediaPlayer != null) {
-                                if(progress / 10 == mediaPlayer.getDuration() / 10){
-                                    playBtn.setVisibility(View.VISIBLE);
-                                    pauseBtn.setVisibility(View.INVISIBLE);
-                                    mediaPlayer.seekTo(0);
-                                }
-
-                                if (fromUser)
-                                    mediaPlayer.seekTo(progress);
-
-                                @SuppressLint("DefaultLocale") String time = String.format("%d:%02d",
-                                        TimeUnit.MILLISECONDS.toMinutes(progress),
-                                        TimeUnit.MILLISECONDS.toSeconds(progress) -
-                                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(progress))
-                                );
-                                durationTxt.setText(time);
-                            }
-                        }
-                    });
-                    mHandler.postDelayed(this, 100);
-                }
-            }
-        });
-    }
-
     public void populateData(){
         final Cursor cursor = mDatabaseHelperAudio.getData();
-        done = false;
-        progressDialog.setMessage("Getting your data..");
-        progressDialog.show();
+        //progressDialog.setMessage("Getting your data..");
+        //progressDialog.show();
 
-        while (cursor.moveToNext()) {
-            if(cursor.getString(0).equals(firebaseAuth.getUid())) {
-                //voiceNotesList.set(i,new VoiceNotesInfo(cursor.getString(1), cursor.getString(2),
-                //cursor.getInt(3)));
-                //System.out.println(i + " " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getInt(3));
-                vnPath = cursor.getString(2);
+        if(cursor.getCount() == 0) //SHOW TEXT that you have 0 vn
+            noOfVn = 0;
+
+        else {
+            while (cursor.moveToNext()) {
+                if (cursor.getString(1).equals(firebaseAuth.getUid())) {
+                    //voiceNotesList.set(i,new VoiceNotesInfo(cursor.getString(1), cursor.getString(2),
+                    //cursor.getInt(3)));
+                    //System.out.println(i + " " + cursor.getString(1) + " " + cursor.getString(2) + " " + cursor.getInt(3));
+                    vnPath = cursor.getString(3);
+                    vnDuration = cursor.getInt(4);
+                    vnName = cursor.getString(2);
+                    vnDurations.add(vnDuration);
+                    vnPaths.add(vnPath);
+                    voiceNotesList.add(new VoiceNotesInfo(vnName, vnPath, vnDuration));
+                    noOfVn +=1;
+                    adapter.notifyDataSetChanged();
+                    Log.d("VNACT", "OK Hereeee");
+                }
             }
-            else
-                nullifyList(voiceNotesList);
         }
-
+/**
         for (int i=0; i<vnNames.size(); i++){
             final int finalI = i;
             referencesVN.get(i).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -213,7 +170,7 @@ public class VoiceNotesActivity extends AppCompatActivity {
                                 mp.start();
                                 progressDialog.dismiss();
                                 vnDuration = mp.getDuration();
-                                voiceNotesList.add(new VoiceNotesInfo(vnNames.get(finalI), vnPath, vnDuration)); //FIX ADAPTER DURATION AND SEEK
+                                voiceNotesList.add(new VoiceNotesInfo(vnNames.get(finalI), vnPaths.get(finalI), vnDurations.get(finalI))); //FIX ADAPTER DURATION AND SEEK
                                 adapter.notifyDataSetChanged();
                             }
                         });
@@ -224,28 +181,10 @@ public class VoiceNotesActivity extends AppCompatActivity {
                     }
                 }
             });
-            System.out.println(vnNames.get(i));
-        }
 
-        if(cursor.getCount() == 0)
-            nullifyList(voiceNotesList);
-
-        else{
-        }
+        }**/
 
         cursor.close();
-    }
-
-    private void nullifyList(ArrayList<VoiceNotesInfo> aL){
-        if(aL.isEmpty()) {
-            for (int i =0; i < noOfVn; i++){
-                aL.add(new VoiceNotesInfo("", "", 0));
-            }
-        }else{
-            for (int i =0; i < noOfVn; i++){
-                aL.set(i, new VoiceNotesInfo("", "", 0));
-            }
-        }
     }
 
     @Override

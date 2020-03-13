@@ -46,7 +46,9 @@ public class VoiceNotesAdapter extends ArrayAdapter<VoiceNotesInfo> {
 
         voiceName.setText(item.getName());
 
-        setUpMediaPlayer(item.getPath(), duration, seekBar);
+        PlayVoiceNotes playVoiceNotes = new PlayVoiceNotes(item.getPath(), duration, seekBar, playBtn, pauseBtn);
+        playVoiceNotes.setUpMediaPlayer();
+        mediaPlayer = playVoiceNotes.getMP();
 
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,29 +74,8 @@ public class VoiceNotesAdapter extends ArrayAdapter<VoiceNotesInfo> {
             }
         });
 
-       /** try {
-            VoiceNotesActivity.ins.moveSeekBar(mediaPlayer, seekBar, duration, playBtn, pauseBtn);
-        }catch (Exception e){e.printStackTrace();}**/
+        playVoiceNotes.moveSeekBar();
 
         return convertView;
-    }
-
-    private void setUpMediaPlayer(String pathSave, TextView durationTxt, SeekBar sb){
-        mediaPlayer = new MediaPlayer();
-
-        try {
-            mediaPlayer.setDataSource(pathSave);
-            mediaPlayer.prepare();
-            @SuppressLint("DefaultLocale") String time = String.format("%d:%02d",
-                    TimeUnit.MILLISECONDS.toMinutes(mediaPlayer.getDuration()),
-                    TimeUnit.MILLISECONDS.toSeconds(mediaPlayer.getDuration()) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mediaPlayer.getDuration()))
-            );
-
-            durationTxt.setText(time);
-            sb.setMax(mediaPlayer.getDuration());
-        }catch (IOException e){
-            e.printStackTrace();
-        }
     }
 }

@@ -13,10 +13,11 @@ public class DatabaseHelperAudio extends SQLiteOpenHelper {
 
     private static final String TABLE_NAME = "audio";
 
-    private static final String COL0 = "UID";
-    private static final String COL1 = "NAME";
-    private static final String COL2 = "PATH";
-    private static final String COL3 = "DURATION";
+    private static final String COL0 = "ID";
+    private static final String COL1 = "UID";
+    private static final String COL2 = "NAME";
+    private static final String COL3 = "PATH";
+    private static final String COL4 = "DURATION";
 
     public DatabaseHelperAudio(@Nullable Context context) {
         super(context, TABLE_NAME, null,1);
@@ -24,8 +25,8 @@ public class DatabaseHelperAudio extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL0 + " TEXT PRIMARY KEY, " +
-                COL1 + " TEXT, " + COL2 + " TEXT, " + COL3 + " INTEGER)";
+        String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL1 + " TEXT, " + COL2 + " TEXT, " + COL3 + " TEXT, " + COL4 + " INTEGER)";
         db.execSQL(createTable);
     }
 
@@ -38,10 +39,10 @@ public class DatabaseHelperAudio extends SQLiteOpenHelper {
     public boolean addData(String uid, String name, String path, int duration){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL0, uid);
-        contentValues.put(COL1, name);
-        contentValues.put(COL2, path);
-        contentValues.put(COL3, duration);
+        contentValues.put(COL1, uid);
+        contentValues.put(COL2, name);
+        contentValues.put(COL3, path);
+        contentValues.put(COL4, duration);
 
         long res = db.insertWithOnConflict(TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
 
